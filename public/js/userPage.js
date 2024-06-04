@@ -1,33 +1,67 @@
 function main(){
     getUserData();
     const btn = document.querySelector('#btn');
+    btn.addEventListener('click', createTodo);
+}
+
+async function createTodo(e){
     const input = document.querySelector('#todo-name');
-    btn.addEventListener('click', async(e)=>{
+    const todoName = input.value.trim();
+    if(todoName.length === 0) return
+
+    try {
+        const post = await fetch('/user/createTodo',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify({todoName})
+        });
         
-        const todoName = input.value.trim();
-        if(todoName.length === 0) return
+        if(!post.ok) throw new Error(post.statusText);
+        const response = await post.json();
+        localStorage.setItem(todoName, JSON.stringify([]));
+        
+        const todosDiv = document.querySelector('#todos-container');
+        todosDiv.append(createCard(todoName));
 
-        try {
-            localStorage.setItem('isChanged','true');
-            const post = await fetch('/user/createTodo',{
-                method:'POST',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body: JSON.stringify({todoName})
-            });
-            
-            if(!post.ok) throw new Error(post.statusText);
+        const todosIds = JSON.parse(localStorage.getItem('todosIds'));
+        todosIds[todoName] = response.data;
+        localStorage.setItem('todosIds',JSON.stringify(todosIds));
 
-            localStorage.setItem(todoName, JSON.stringify([]));
-           
-            const todosDiv = document.querySelector('#todos-container');
-            todosDiv.append(createCard(todoName));
+    } catch (error) {
+        alert(error.message);
+    }
 
-        } catch (error) {
-            alert(error.message);
-        }
-    });
+}
+
+async function deleteTodo(e){
+    try {
+        // console.log(e);
+        const todoCard = e.target.parentNode;
+        const todoName = todoCard.firstChild.textContent;
+        const todosIds = JSON.parse(localStorage.getItem('todosIds'));
+
+        const todoId = todosIds[todoName];
+
+        const post = await fetch('/user/deleteTodo',{
+            method:'POST',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({_id: todoId})
+        })
+
+        if(! post.ok) throw new Error(post.statusText);
+
+
+        localStorage.removeItem(todoName);
+        const todosDiv = document.querySelector('#todos-container');
+        todosDiv.removeChild(todoCard);
+        
+    } catch (error) {
+        alert(error);
+    }
 }
 
 async function getUserData(){
@@ -61,13 +95,15 @@ function render(user){
     }
     todosDiv.append(docFrag);
 
-    localStorage.setItem('isChanged','false');
-
     saveTolocalStorage(todos)
 }
 
 function saveTolocalStorage(todos){
+    const todosIds = {};
     for(let todo of todos){
+
+        todosIds[todo.name] = todo._id;
+        
         const tasks = todo.tasks;
         const newTasks = tasks.map((t)=>{
 
@@ -98,7 +134,7 @@ function saveTolocalStorage(todos){
         localStorage.setItem(todo.name, JSON.stringify(newTasks));
         
     }
-
+    localStorage.setItem('todosIds',JSON.stringify(todosIds));
 }
 
 
@@ -106,44 +142,34 @@ function createCard(todoName){
 
     let card = document.createElement('div');
     card.classList.add('card');
-
-    let p = document.createElement('p');
-    p.textContent = todoName;
-    card.append(p);
-
+    
     let anchortag = document.createElement('a');
     anchortag.href = `/home/todo?todoName=${todoName}`;
     anchortag.target = '_blank';
+    anchortag.textContent = todoName;
     
+    card.append(anchortag);
+
     let deleteBtn = document.createElement('button');
     deleteBtn.textContent = 'delete';
-    deleteBtn.addEventListener('click',(e)=>{
-        
-    });
-    anchortag.append(card);
+    deleteBtn.addEventListener('click', deleteTodo);
+
+    
     card.append(deleteBtn);
 
-    return anchortag;
+    return card;
 }
 
 
 // before unload event
 window.onbeforeunload = async function(){
-    if(localStorage.getItem('isChanged') === 'false'){ 
-        console.log('no changes');
-        return;
-    }
     let res = {};
 
     const todos = Object.keys(localStorage);
     console.log(todos);
     for(let key of todos){
         const tasks = JSON.parse(localStorage.getItem(key));
-        // console.log(typeof tasks);
-
-        // to prevent the isChanged boolean value
-        if(!Array.isArray(tasks)) continue;
-        
+        if(! Array.isArray(tasks)) continue;
         const newTasks = tasks.map((t)=>{
             const obj = {
                 title:t.task,
@@ -164,9 +190,9 @@ window.onbeforeunload = async function(){
         },
         body: JSON.stringify(res)
     });
-
     console.log(post.status);
 };
+
 
 
 main()

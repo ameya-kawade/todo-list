@@ -17,7 +17,7 @@ const createTodo = async(req, res, next) =>{
         user.todos.push(todo._id);
         await user.save();
         
-        res.status(201).json(new ApiResponse(201,'Successfully created todo',null));
+        res.status(201).json(new ApiResponse(201,'Successfully created todo',todo._id));
     }
     catch(err){
         console.log(err);
@@ -37,6 +37,28 @@ const getData = async(req, res, next) =>{
     
 };
 
+
+const deleteTodo = async(req, res, next) =>{
+    const todo_id = req.body._id;
+
+    const delTodoFromUser = await User.findOneAndUpdate(
+        { _id: req.user._id },
+        { $pull: { todos: todo_id } },
+        { new: true }
+    ); 
+    console.log(delTodoFromUser);
+    
+    const delTodoFromTodos = await Todo.deleteOne(
+        {   
+            _id: todo_id , 
+            owner: req.user._id
+        }
+    );
+
+    console.log(delTodoFromTodos);
+
+    res.status(200).json(new ApiResponse(200, 'successfully deleted todo',null));
+};
 
 const saveData = async(req, res, next) =>{
     try {
@@ -73,4 +95,4 @@ const saveData = async(req, res, next) =>{
     }
 };
 
-export { createTodo, getData, saveData };
+export { createTodo, getData, saveData, deleteTodo };

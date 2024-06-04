@@ -63,7 +63,6 @@ function returnTasksString(i,taskArray){
 
 
 const doneBtnFunc = (e)=>{
-    localStorage.setItem('isChanged','true');
     let parent = e.target.parentNode.parentNode;
     console.log(parent);
     console.log(e);
@@ -81,7 +80,6 @@ const doneBtnFunc = (e)=>{
 };
 
 const deleteBtnFunc = (e)=>{
-    localStorage.setItem('isChanged','true');
     console.log("Delete btn clicked");
     let taskId =  Number(e.target.parentNode.parentNode.getAttribute("id"));
     tasks.splice(taskId,1);
@@ -163,7 +161,6 @@ function renderTask(i,taskArray){
 }
 
 taskBtn.addEventListener("click",()=>{
-    localStorage.setItem('isChanged','true');
     let task = taskInput.value;
     taskInput.value = "";
     let datetime = dateTimeInput.value;

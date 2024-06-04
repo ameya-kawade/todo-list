@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { __dirname } from '../../path.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { authenticate } from '../middlewares/authenticate.js';
-import { createTodo, getData, saveData } from '../controllers/user.todos.js';
+import { createTodo, getData, saveData, deleteTodo } from '../controllers/user.todos.js';
 
 export const userRouter = Router();
 
@@ -11,3 +11,5 @@ userRouter.route('/createTodo').post(asyncHandler(authenticate),asyncHandler(cre
 userRouter.route('/getData').get(asyncHandler(authenticate),asyncHandler(getData));
 
 userRouter.route('/saveData').post(asyncHandler(authenticate), asyncHandler(saveData));
+
+userRouter.route('/deleteTodo').post(asyncHandler(authenticate), asyncHandler(deleteTodo));
