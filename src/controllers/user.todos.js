@@ -46,7 +46,7 @@ const deleteTodo = async(req, res, next) =>{
         { $pull: { todos: todo_id } },
         { new: true }
     ); 
-    console.log(delTodoFromUser);
+    // console.log(delTodoFromUser);
     
     const delTodoFromTodos = await Todo.deleteOne(
         {   
@@ -55,7 +55,7 @@ const deleteTodo = async(req, res, next) =>{
         }
     );
 
-    console.log(delTodoFromTodos);
+    // console.log(delTodoFromTodos);
 
     res.status(200).json(new ApiResponse(200, 'successfully deleted todo',null));
 };

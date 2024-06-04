@@ -24,9 +24,6 @@ function createNotification(task){
                     });
                 },time);
             }
-            else{
-                alert("Cannot create notifications since the notification permission is denied, to get notifications please grant notification permission.")
-            }
             return true;
         }
         else{
@@ -233,3 +230,6 @@ function initialization(){
 }
 
 initialization();
+if(Notification.permission !== "granted"){
+    alert('please allow notification so that you will get the notification for todos');
+}
