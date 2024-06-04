@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="/static/js/userPage.js" defer></script>
+    <style>
+        .flex{
+            width: 100%;
+            height: fit-content;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .card{
+            height: 300px;
+            width: 300px;
+            background-color: aliceblue;
+            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .space{
+            margin-top: 100px;
+            margin-bottom: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h2 id="userName"></h2>
+    <div id="create-todo">
+        <label for="todo-name">Enter todo name:</label>
+        <input type="text" autofocus name="todoName" id="todo-name">
+        <button id="btn">create</button>
+    </div>
+    <div id="todos-container" class="flex space"></div>
+</body>
+</html>

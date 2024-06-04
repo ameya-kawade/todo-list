@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To do list</title>
+    <link rel="icon" href="/static/images/icon.png">
+    <link rel="stylesheet" href="/static/styles/style.css" type="text/css" />
+    <script src="/static/js/script.js" defer></script>
+  </head>
+
+  <body>
+    <div
+      class="flex min-h-screen w-full items-center justify-center bg-[#0e1629] py-10 font-[system-ui]"
+      id="main-container"
+    >
+      <div
+        class="flex h-fit w-[90%] max-w-[700px] flex-col items-center space-y-10 rounded-lg bg-[#f6f9ff] px-[1em] py-[2em]"
+        id="to-do-list-container"
+      >
+        <button
+          class="absolute right-2 top-1 rounded-md bg-[#538ff8] px-5 py-1 text-white hover:bg-[#69a0ff]"
+          id="bell-btn"
+        >
+          <div class="flex h-full w-full space-x-2">
+            <img src="/static/images/bell.png" alt="bell-icon" class="bell-icon" />
+            <p class="font-semibold">Enable notifications</p>
+          </div>
+        </button>
+        <h2 class="text-2xl font-semibold">To Do List</h2>
+        <input
+          type="text"
+          name="task"
+          id="task"
+          placeholder="Enter your task here."
+          class="input-styles"
+        />
+        <input
+          type="datetime-local"
+          name="datetime"
+          id="datetime"
+          class="input-styles"
+        />
+
+        <button
+          class="min-h-[2.5em] w-[90%] rounded-lg font-semibold bg-[#538ff8] px-5 py-2 text-white hover:bg-[#619bff]"
+          id="add-task-btn"
+        >
+          Add Task
+        </button>
+
+        <div
+          id="tasks-list"
+          class="flex w-full flex-col items-center space-y-8 rounded-xl p-[1em]"
+        ></div>
+      </div>
+    </div>
+  </body>
+</html>
