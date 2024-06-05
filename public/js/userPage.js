@@ -150,6 +150,7 @@ function createCard(todoName){
     card.classList.add('card');
     
     let anchortag = document.createElement('a');
+    anchortag.classList.add('link');
     anchortag.href = `/home/todo?todoName=${todoName}`;
     anchortag.target = '_blank';
     anchortag.textContent = todoName;
@@ -157,6 +158,7 @@ function createCard(todoName){
     card.append(anchortag);
 
     let deleteBtn = document.createElement('button');
+    deleteBtn.classList.add('delete-btn');
     deleteBtn.textContent = 'delete';
     deleteBtn.addEventListener('click', deleteTodo);
 

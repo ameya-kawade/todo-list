@@ -1,24 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup page</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup page</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f8f9fa; /* Light gray (60%) */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .signup-container {
+      background-color: #fff; /* White (30%) */
+      padding: 30px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+      width: 350px; /* Set a fixed width for the container */
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Add drop shadow */
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #3498db; /* Dark blue (10%) - Accent color */
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333; /* Dark gray */
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      margin-bottom: 15px;
+    }
+
+    button[type="submit"] {
+      background-color: #3498db; /* Dark blue (10%) - Accent color */
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #2980b9; /* Darken blue on hover */
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 10px;
+      font-size: smaller;
+      color: #333; /* Dark gray */
+    }
+
+    .login-link a { /* Style the link text within .login-link */
+      color: #3498db; /* Dark blue (10%) - Accent color */
+      font-weight: bold; /* Make the text bold */
+      text-decoration: none; /* Remove underline */
+    }
+
+    .login-link a:hover { /* Add hover effect for the link text */
+      text-decoration: underline; /* Underline on hover */
+    }
+  </style>
 </head>
 <body>
-    <h1>Signup page</h1>
+  <div class="signup-container">
+    <h1>Signup</h1>
     <form action="/signup" method="post">
-        <label for="name">Name: </label>
-        <input type="text" required autofocus name="name" id="name"><br><br>
+      <label for="name">Name: </label>
+      <input type="text" required autofocus name="name" id="name"><br><br>
 
-        <label for="email">email: </label>
-        <input type="text" required autofocus name="email" id="email"><br><br>
+      <label for="email">Email: </label>
+      <input type="text" required autofocus name="email" id="email"><br><br>
 
-        <label for="password">password: </label>
-        <input type="text" required autofocus name="password" id="password"><br><br>
-        <br>
-        <button type="submit">Submit</button>
+      <label for="password">Password: </label>
+      <input type="password" required autofocus name="password" id="password"><br><br>
+      <br>
+      <button type="submit">Submit</button>
     </form>
-    <h3><a href="/">Login here</a></h2>
+    <div class="login-link">
+      Already have an account? <a href="/">Login here</a>
+    </div>
+  </div>
 </body>
 </html>
