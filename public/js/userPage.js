@@ -1,3 +1,5 @@
+const todosSet = new Set();
+
 function main(){
     getUserData();
     const btn = document.querySelector('#btn');
@@ -8,8 +10,11 @@ async function createTodo(e){
     const input = document.querySelector('#todo-name');
     const todoName = input.value.trim();
     if(todoName.length === 0) return
-
     try {
+        // check for duplicate todoname before creating
+        if(todosSet.has(todoName.toLowerCase())) throw new Error('Cannot create duplicate todos');
+        todosSet.add(todoName.toLowerCase());
+
         const post = await fetch('/user/createTodo',{
             method:'POST',
             headers:{
@@ -17,7 +22,7 @@ async function createTodo(e){
             },
             body: JSON.stringify({todoName})
         });
-        
+        input.textContent = '';
         if(!post.ok) throw new Error(post.statusText);
         const response = await post.json();
         localStorage.setItem(todoName, JSON.stringify([]));
@@ -45,7 +50,7 @@ async function deleteTodo(e){
         const todoId = todosIds[todoName];
 
         const post = await fetch('/user/deleteTodo',{
-            method:'POST',
+            method:'DELETE',
             headers:{
                 'Content-Type': 'application/json'
             },
@@ -54,7 +59,7 @@ async function deleteTodo(e){
 
         if(! post.ok) throw new Error(post.statusText);
 
-
+        todosSet.delete(todoName.toLowerCase());
         localStorage.removeItem(todoName);
         const todosDiv = document.querySelector('#todos-container');
         todosDiv.removeChild(todoCard);
@@ -92,6 +97,7 @@ function render(user){
     const docFrag = new DocumentFragment();
     for(let todo of todos){
         docFrag.appendChild(createCard(todo.name));
+        todosSet.add((todo.name).toLowerCase());
     }
     todosDiv.append(docFrag);
 
@@ -184,7 +190,7 @@ window.onbeforeunload = async function(){
     console.log(res)
 
     const post = await fetch('/user/saveData',{
-        method: 'POST',
+        method: 'PATCH',
         headers:{
             'Content-Type': 'application/json'
         },

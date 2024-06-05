@@ -10,6 +10,6 @@ userRouter.route('/createTodo').post(asyncHandler(authenticate),asyncHandler(cre
 
 userRouter.route('/getData').get(asyncHandler(authenticate),asyncHandler(getData));
 
-userRouter.route('/saveData').post(asyncHandler(authenticate), asyncHandler(saveData));
+userRouter.route('/saveData').patch(asyncHandler(authenticate), asyncHandler(saveData));
 
-userRouter.route('/deleteTodo').post(asyncHandler(authenticate), asyncHandler(deleteTodo));
+userRouter.route('/deleteTodo').delete(asyncHandler(authenticate), asyncHandler(deleteTodo));
