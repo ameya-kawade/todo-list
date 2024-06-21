@@ -9,7 +9,7 @@ import { rootAuthenticate,authenticate } from '../middlewares/authenticate.js';
 
 export const rootRouter = Router();
 
-rootRouter.route('').get(asyncHandler(rootAuthenticate),(req, res)=>{
+rootRouter.route('/').get(asyncHandler(rootAuthenticate),(req, res)=>{
     res.sendFile( join(__dirname,'public','login.html') );
 });
 

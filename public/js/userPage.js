@@ -14,7 +14,7 @@ async function createTodo(e){
         // check for duplicate todoname before creating
         if(todosSet.has(todoName.toLowerCase())) throw new Error('Cannot create duplicate todos');
         todosSet.add(todoName.toLowerCase());
-
+        input.value = '';
         const post = await fetch('/user/createTodo',{
             method:'POST',
             headers:{
@@ -30,9 +30,20 @@ async function createTodo(e){
         const todosDiv = document.querySelector('#todos-container');
         todosDiv.append(createCard(todoName));
 
-        const todosIds = JSON.parse(localStorage.getItem('todosIds'));
-        todosIds[todoName] = response.data;
-        localStorage.setItem('todosIds',JSON.stringify(todosIds));
+        // Fetching the todoids object from local storage and then adding a new todoId to that object and again setting it to localstorage
+        let todosIds = localStorage.getItem('todosIds');
+        if(todosIds){
+            todosIds = JSON.parse(todosIds);
+            todosIds[todoName] = response.data;
+            localStorage.setItem('todosIds',JSON.stringify(todosIds));
+        }
+        else{
+            const obj = {
+                todoName: response.data
+            }
+            localStorage.setItem('todosIds', JSON.stringify(obj));
+        }
+        
 
     } catch (error) {
         alert(error.message);
@@ -61,6 +72,8 @@ async function deleteTodo(e){
 
         todosSet.delete(todoName.toLowerCase());
         localStorage.removeItem(todoName);
+        delete todosIds[todoName];
+        localStorage.setItem('todosIds', JSON.stringify(todosIds));
         const todosDiv = document.querySelector('#todos-container');
         todosDiv.removeChild(todoCard);
         
@@ -73,7 +86,7 @@ async function getUserData(){
     try {
         const request = await fetch('/user/getData');
         if(!request.ok){
-            console.log(request.statusText);
+            alert(request.statusText);
         }
         else{
             const user = await request.json();
@@ -171,36 +184,37 @@ function createCard(todoName){
 
 // before unload event
 window.onbeforeunload = async function(){
-    let res = {};
-
     const todos = Object.keys(localStorage);
-    console.log(todos);
-    for(let key of todos){
-        const tasks = JSON.parse(localStorage.getItem(key));
-        if(! Array.isArray(tasks)) continue;
-        const newTasks = tasks.map((t)=>{
-            const obj = {
-                title:t.task,
-                status:t.status,
-                dueTime:t.timing
-            };
-            return obj;
+    if(!todos){
+        let res = {};
+        console.log(todos);
+        for(let key of todos){
+            const tasks = JSON.parse(localStorage.getItem(key));
+            if(! Array.isArray(tasks)) continue;
+            const newTasks = tasks.map((t)=>{
+                const obj = {
+                    title:t.task,
+                    status:t.status,
+                    dueTime:t.timing
+                };
+                return obj;
+            });
+            res[key] = newTasks;
+        }
+
+        console.log(res);
+        localStorage.clear();
+        const post = await fetch('/user/saveData',{
+            method: 'PATCH',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(res)
         });
-        res[key] = newTasks;
+        console.log(post.status);
     }
-
-    console.log(res)
-
-    const post = await fetch('/user/saveData',{
-        method: 'PATCH',
-        headers:{
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(res)
-    });
-    console.log(post.status);
 };
 
 
 
-main()
+main();
