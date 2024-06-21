@@ -13,6 +13,6 @@ export const userSignUp = async(req, res, next) =>{
     });
 
     const token = user.generateAccessToken();
-
-    res.cookie('token',token,{httpOnly:true}).redirect('/home');
+    const isProduction = process.env.NODE_ENV === 'production';
+    res.cookie('token',token,{httpOnly:true, secure: isProduction}).redirect('/home');
 };

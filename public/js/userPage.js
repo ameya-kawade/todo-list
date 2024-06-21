@@ -164,7 +164,7 @@ function createCard(todoName){
     
     let anchortag = document.createElement('a');
     anchortag.classList.add('link');
-    anchortag.href = `/home/todo?todoName=${todoName}`;
+    anchortag.href = `/home/todo?todoName=${DOMPurify.sanitize(todoName)}`;
     anchortag.target = '_blank';
     anchortag.textContent = todoName;
     
@@ -185,7 +185,8 @@ function createCard(todoName){
 // before unload event
 window.onbeforeunload = async function(){
     const todos = Object.keys(localStorage);
-    if(!todos){
+    if(todos){
+        console.log('entered');
         let res = {};
         console.log(todos);
         for(let key of todos){
@@ -203,7 +204,6 @@ window.onbeforeunload = async function(){
         }
 
         console.log(res);
-        localStorage.clear();
         const post = await fetch('/user/saveData',{
             method: 'PATCH',
             headers:{
@@ -212,7 +212,9 @@ window.onbeforeunload = async function(){
             body: JSON.stringify(res)
         });
         console.log(post.status);
+        localStorage.clear();
     }
+    
 };
 
 

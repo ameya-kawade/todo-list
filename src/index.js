@@ -6,6 +6,7 @@ connectToDB()
     const port = process.env.PORT || 8000;
     app.on("error",(err)=>{
         console.log(err);
+        process.exit(1);
     })
     app.listen(port, ()=>{
         console.log("Server started on port :", port);

@@ -5,7 +5,7 @@ const taskList = document.querySelector("#tasks-list");
 const bellBtn = document.querySelector("#bell-btn");
 let currDateTime = new Date();
 let taskCount = 0;
-const todoName = location.href.split('?')[1].split('=')[1];
+const todoName = DOMPurify.sanitize(location.href.split('?')[1].split('=')[1]);
 let tasks = localStorage.getItem(todoName);
 let notificationPermission = false;
 
@@ -34,7 +34,7 @@ function createNotification(task){
 }
 
 function returnTasksString(i,taskArray){
-    return `<div class="tasks-design ${(taskArray[i].status)?'completed':''}" id = ${i}>
+    return (`<div class="tasks-design ${(taskArray[i].status)?'completed':''}" id = ${i}>
                     <div class="task-container">
                         <p>
                             <span class="font-semibold text-lg">Task:</span>
@@ -55,7 +55,7 @@ function returnTasksString(i,taskArray){
                         <button id = done-btn${i} class="bg-green-500 task-btn hover:bg-green-400">${(taskArray[i].status)?"Undone":"Done"}</button>
                         <button id = delete-btn${i} class="task-btn bg-red-500 hover:bg-red-400">Delete</button>
                     </div>
-                </div>`;
+                </div>`);
 }
 
 
@@ -133,7 +133,7 @@ function renderTasks(taskArray){
     let l = taskArray.length;
     let i;
     for(i = 0; i < l; i++){
-        let fragment = returnFragment(returnTasksString(i,taskArray));
+        let fragment = returnFragment(DOMPurify.sanitize(returnTasksString(i,taskArray)));
         docfrag.append(fragment);
     }
     taskCount = i - 1;
@@ -143,7 +143,7 @@ function renderTasks(taskArray){
 
 function renderTask(i,taskArray){
     let docfrag = new DocumentFragment();
-    docfrag.append(returnFragment(returnTasksString(i,taskArray)));
+    docfrag.append(returnFragment(DOMPurify.sanitize(returnTasksString(i,taskArray))));
     if(docfrag.firstChild){
         let el = docfrag.firstChild;
         el.classList.add("animate-fade-in");
@@ -158,9 +158,9 @@ function renderTask(i,taskArray){
 }
 
 taskBtn.addEventListener("click",()=>{
-    let task = taskInput.value;
+    let task = DOMPurify.sanitize(taskInput.value);
     taskInput.value = "";
-    let datetime = dateTimeInput.value;
+    let datetime = DOMPurify.sanitize(dateTimeInput.value);
     if(task && datetime){
         datetime = new Date(datetime);
         let year = datetime.getFullYear().toString();
