@@ -15,3 +15,4 @@ connectToDB()
 .catch((err)=>{
     console.log(err);
 })
+
