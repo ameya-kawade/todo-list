@@ -1,11 +1,8 @@
 steps:
-  # Step 1: Install dependencieg
-  - name: 'gcr.io/cloud-builders/npm'
-    args: ['install']
-
-  # step 2: deploying
   - name: 'gcr.io/cloud-builders/gcloud'
     args: ['app', 'deploy', '--quiet']
 
 options:
   logging: CLOUD_LOGGING_ONLY
+
+timeout: '1600s'
