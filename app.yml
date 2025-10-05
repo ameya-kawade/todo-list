@@ -1,0 +1,9 @@
+runtime: nodejs20
+instance_class: F1
+env: standard
+
+env_variables:
+  PORT: "8080"
+  DB_URL: "mongodb+srv://ameyakawade0:ameya123@cluster0.cuvilli.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+  ACCESS_TOKEN_SECRET: "1ae17240d4d6389c1fadfd6539686b0f6708f671e47eda35aeeef1fc110d995d"
+  NODE_ENV: "localhost"
